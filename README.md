@@ -113,6 +113,8 @@ See the detailed steps below for installation and configuration.
   Browser wallet for:
   - Selecting a role account (supplier, lab, etc.)
   - Signing transactions against the Ganache network.
+ 
+    <img src="./architecture_diagram_medchain.png" width="400"/>
 
 ---
 
