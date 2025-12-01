@@ -114,7 +114,7 @@ See the detailed steps below for installation and configuration.
   - Selecting a role account (supplier, lab, etc.)
   - Signing transactions against the Ganache network.
  
-    <img src="./architecture_diagram_medchain.png" width="400"/>
+    <img src="./architecture_diagram_medchain.png" width="200"/>
 
 ---
 
