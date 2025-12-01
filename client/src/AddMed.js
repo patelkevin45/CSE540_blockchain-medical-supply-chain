@@ -6,6 +6,7 @@ function AddMed() {
   useEffect(() => {
     loadWeb3();
     loadBlockchaindata();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [currentaccount, setCurrentaccount] = useState("");
@@ -43,7 +44,7 @@ function AddMed() {
         networkData.address
       );
       setSupplyChain(supplychain);
-      var i;
+      let i;
       const medCtr = await supplychain.methods.batchCtr().call();
       const med = {};
       const medStage = [];
@@ -58,6 +59,7 @@ function AddMed() {
       window.alert("The smart contract is not deployed to current network");
     }
   };
+
   if (loader) {
     return (
       <div>
@@ -65,7 +67,8 @@ function AddMed() {
       </div>
     );
   }
-    const handlerChangeNameMED = (event) => {
+
+  const handlerChangeNameMED = (event) => {
     setMedName(event.target.value);
   };
   const handlerChangeDesMED = (event) => {
@@ -74,7 +77,7 @@ function AddMed() {
   const handlerSubmitMED = async (event) => {
     event.preventDefault();
     try {
-      var reciept = await SupplyChain.methods
+      const reciept = await SupplyChain.methods
         .createDrugBatch(MedName, MedDes)
         .send({ from: currentaccount });
       if (reciept) {
@@ -85,61 +88,86 @@ function AddMed() {
       alert("An error occurred! Check the console for details.");
     }
   };
+
   return (
-    <div>
-        <div className="account-info"><b>Current Account:</b> {currentaccount}</div>
-        
-        <h5>Order a New Drug Batch</h5>
+    <div className="page">
+      <header className="page-header">
+        <div>
+          <h1 className="page-title">Order a new drug batch</h1>
+          <p className="page-subtitle">
+            Define a batch on-chain so it can be tracked through every stage of the
+            supply chain.
+          </p>
+        </div>
+        <div className="page-header-meta">
+          <div className="account-info">
+            <b>Current Account:</b>&nbsp;{currentaccount}
+          </div>
+        </div>
+      </header>
+
+      <section className="section-card">
+        <div className="section-header">
+          <h2 className="section-title">Batch details</h2>
+          <p className="section-description">
+            Provide a human-readable name and description for this batch.
+          </p>
+        </div>
+
         <form onSubmit={handlerSubmitMED}>
-            <input
-                className="form-control-sm"
-                type="text"
-                onChange={handlerChangeNameMED}
-                placeholder="Drug Name"
-                required
-            />
-            <input
-                className="form-control-sm"
-                type="text"
-                onChange={handlerChangeDesMED}
-                placeholder="Batch Description"
-                required
-            />
-            <button
-                className="btn btn-primary btn-sm"
-                type="submit"
-            >
-                Order Batch
-            </button>
+          <input
+            className="form-control-sm"
+            type="text"
+            onChange={handlerChangeNameMED}
+            placeholder="Drug name"
+            required
+          />
+          <input
+            className="form-control-sm"
+            type="text"
+            onChange={handlerChangeDesMED}
+            placeholder="Batch description"
+            required
+          />
+          <button className="btn btn-primary btn-sm" type="submit">
+            Create batch
+          </button>
         </form>
+      </section>
 
-        <hr />
+      <section className="section-card">
+        <div className="section-header">
+          <h2 className="section-title">Existing drug batches</h2>
+          <span className="pill pill-muted">
+            Total: {Object.keys(MED || {}).length}
+          </span>
+        </div>
 
-        <h5>Existing Drug Batches</h5>
-        <table className="table">
+        <div className="table-wrapper">
+          <table className="table">
             <thead>
-                <tr>
-                    <th scope="col">Batch ID</th>
-                    <th scope="col">Drug Name</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Current Stage</th>
-                </tr>
+              <tr>
+                <th scope="col">Batch ID</th>
+                <th scope="col">Drug name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Current stage</th>
+              </tr>
             </thead>
             <tbody>
-                {Object.keys(MED).map(function (key) {
-                    return (
-                        <tr key={key}>
-                            <td>{MED[key].batchId}</td>
-                            <td>{MED[key].drugName}</td>
-                            <td>{MED[key].batchDescription}</td>
-                            <td>{MedStage[key]}</td>
-                        </tr>
-                    );
-                })}
+              {Object.keys(MED).map((key) => (
+                <tr key={key}>
+                  <td>{MED[key].batchId}</td>
+                  <td>{MED[key].drugName}</td>
+                  <td>{MED[key].batchDescription}</td>
+                  <td>{MedStage[key]}</td>
+                </tr>
+              ))}
             </tbody>
-        </table>
+          </table>
+        </div>
+      </section>
     </div>
-);
+  );
 }
 
 export default AddMed;

@@ -6,6 +6,7 @@ function Supply() {
   useEffect(() => {
     loadWeb3();
     loadBlockchaindata();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [currentaccount, setCurrentaccount] = useState("");
@@ -22,11 +23,10 @@ function Supply() {
     } else if (window.web3) {
       window.web3 = new Web3(window.web3.currentProvider);
     } else {
-      window.alert(
-        "Non-Ethereum browser detected. You should consider trying MetaMask!"
-      );
+      window.alert("Non-Ethereum browser detected. You should consider trying MetaMask!");
     }
   };
+
   const loadBlockchaindata = async () => {
     setloader(true);
     const web3 = window.web3;
@@ -41,7 +41,7 @@ function Supply() {
         networkData.address
       );
       setSupplyChain(supplychain);
-      var i;
+      let i;
       const medCtr = await supplychain.methods.batchCtr().call();
       const med = {};
       const medStage = [];
@@ -56,6 +56,7 @@ function Supply() {
       window.alert("The smart contract is not deployed to current network");
     }
   };
+
   if (loader) {
     return (
       <div>
@@ -63,13 +64,15 @@ function Supply() {
       </div>
     );
   }
-    const handlerChangeID = (event) => {
+
+  const handlerChangeID = (event) => {
     setID(event.target.value);
   };
+
   const handlerSubmitRMSsupply = async (event) => {
     event.preventDefault();
     try {
-      var reciept = await SupplyChain.methods
+      const reciept = await SupplyChain.methods
         .sourceIngredients(ID)
         .send({ from: currentaccount });
       if (reciept) {
@@ -79,10 +82,11 @@ function Supply() {
       alert("An error occured!!!");
     }
   };
+
   const handlerSubmitManufacturing = async (event) => {
     event.preventDefault();
     try {
-      var reciept = await SupplyChain.methods
+      const reciept = await SupplyChain.methods
         .produceBatch(ID)
         .send({ from: currentaccount });
       if (reciept) {
@@ -92,10 +96,11 @@ function Supply() {
       alert("An error occured!!!");
     }
   };
+
   const handlerSubmitDistribute = async (event) => {
     event.preventDefault();
     try {
-      var reciept = await SupplyChain.methods
+      const reciept = await SupplyChain.methods
         .shipToWholesaler(ID)
         .send({ from: currentaccount });
       if (reciept) {
@@ -105,10 +110,11 @@ function Supply() {
       alert("An error occured!!!");
     }
   };
+
   const handlerSubmitRetail = async (event) => {
     event.preventDefault();
     try {
-      var reciept = await SupplyChain.methods
+      const reciept = await SupplyChain.methods
         .shipToPharmacy(ID)
         .send({ from: currentaccount });
       if (reciept) {
@@ -118,10 +124,11 @@ function Supply() {
       alert("An error occured!!!");
     }
   };
+
   const handlerSubmitSold = async (event) => {
     event.preventDefault();
     try {
-      var reciept = await SupplyChain.methods
+      const reciept = await SupplyChain.methods
         .dispenseToPatient(ID)
         .send({ from: currentaccount });
       if (reciept) {
@@ -131,53 +138,106 @@ function Supply() {
       alert("An error occured!!!");
     }
   };
+
   return (
-    <div>
-      <div className="account-info"><b>Current Account:</b> {currentaccount}</div>
-
-      <h5>Live Batch Status</h5>
-      <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">Batch ID</th>
-            <th scope="col">Drug Name</th>
-            <th scope="col">Description</th>
-            <th scope="col">Current Stage</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Object.keys(MED).map(key => (
-            <tr key={key}>
-              <td>{MED[key].batchId}</td>
-              <td>{MED[key].drugName}</td>
-              <td>{MED[key].batchDescription}</td>
-              <td>{MedStage[key]}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <hr />
-
-      <h5>Process Batch</h5>
-      <p>Enter a Batch ID and select the action to move it to the next stage.</p>
-
-      <form onSubmit={e => e.preventDefault()} className="d-flex flex-column gap-3">
-        <input
-          className="form-control-sm"
-          type="text"
-          onChange={handlerChangeID}
-          placeholder="Enter Batch ID"
-          required
-        />
+    <div className="page">
+      <header className="page-header">
         <div>
-          <button onClick={handlerSubmitRMSsupply} className="btn btn-outline-primary btn-sm">Supply Ingredients</button>
-          <button onClick={handlerSubmitManufacturing} className="btn btn-outline-primary btn-sm">Manufacture</button>
-          <button onClick={handlerSubmitDistribute} className="btn btn-outline-primary btn-sm">Distribute</button>
-          <button onClick={handlerSubmitRetail} className="btn btn-outline-primary btn-sm">Retail</button>
-          <button onClick={handlerSubmitSold} className="btn btn-outline-danger btn-sm">Dispense</button>
+          <h1 className="page-title">Supply chain control</h1>
+          <p className="page-subtitle">
+            Advance batches through sourcing, formulation, transit and care.
+          </p>
         </div>
-      </form>
+        <div className="page-header-meta">
+          <div className="account-info">
+            <b>Current Account:</b>&nbsp;{currentaccount}
+          </div>
+        </div>
+      </header>
+
+      <section className="section-card">
+        <div className="section-header">
+          <h2 className="section-title">Live batch status</h2>
+          <p className="section-description">
+            Overview of all batches currently registered on the smart contract.
+          </p>
+        </div>
+
+        <div className="table-wrapper">
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">Batch ID</th>
+                <th scope="col">Drug name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Current stage</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.keys(MED).map((key) => (
+                <tr key={key}>
+                  <td>{MED[key].batchId}</td>
+                  <td>{MED[key].drugName}</td>
+                  <td>{MED[key].batchDescription}</td>
+                  <td>{MedStage[key]}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section className="section-card">
+        <div className="section-header">
+          <h2 className="section-title">Process a batch</h2>
+          <p className="section-description">
+            Enter a batch ID and choose which action to apply next.
+          </p>
+        </div>
+
+        <form onSubmit={(e) => e.preventDefault()} className="process-form">
+          <input
+            className="form-control-sm"
+            type="text"
+            onChange={handlerChangeID}
+            placeholder="Enter batch ID"
+            required
+          />
+
+          <div className="button-row">
+            <button
+              onClick={handlerSubmitRMSsupply}
+              className="btn btn-outline-primary btn-sm"
+            >
+              Supply ingredients
+            </button>
+            <button
+              onClick={handlerSubmitManufacturing}
+              className="btn btn-outline-primary btn-sm"
+            >
+              Manufacture
+            </button>
+            <button
+              onClick={handlerSubmitDistribute}
+              className="btn btn-outline-primary btn-sm"
+            >
+              Ship to transit hub
+            </button>
+            <button
+              onClick={handlerSubmitRetail}
+              className="btn btn-outline-primary btn-sm"
+            >
+              Ship to care outlet
+            </button>
+            <button
+              onClick={handlerSubmitSold}
+              className="btn btn-outline-danger btn-sm"
+            >
+              Dispense to patient
+            </button>
+          </div>
+        </form>
+      </section>
     </div>
   );
 }
