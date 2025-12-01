@@ -1,7 +1,7 @@
 // src/Track.js
 import React, { useState, useEffect } from "react";
 import Web3 from "web3";
-import PharmaTraceABI from "./artifacts/PharmaTrace.json";
+import PharmaTraceABI from "./artifacts/MedChain.json";
 
 function Track() {
   const [currentaccount, setCurrentaccount] = useState("");

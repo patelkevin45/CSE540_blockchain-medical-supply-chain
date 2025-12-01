@@ -4,6 +4,7 @@ import Home from "./Home";
 import AddMed from "./AddMed";
 import Supply from "./Supply";
 import Track from "./Track";
+import Logs from "./Logs";
 import { BrowserRouter as Router, Switch, Route, NavLink } from "react-router-dom";
 
 function App() {
@@ -53,6 +54,14 @@ function App() {
               >
                 Track
               </NavLink>
+              <NavLink
+                to="/logs"
+                className="nav-link"
+                activeClassName="active"
+              >
+                Logs
+              </NavLink>
+
             </div>
           </div>
         </nav>
@@ -98,6 +107,7 @@ function App() {
               <Route path="/addmed" component={AddMed} />
               <Route path="/supply" component={Supply} />
               <Route path="/track" component={Track} />
+              <Route path="/logs" component={Logs} />
             </Switch>
           </main>
         </div>
